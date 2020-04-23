@@ -42,6 +42,29 @@ d3.json("data/samples.json").then((data) => {
   
     Plotly.newPlot("bubble", bubbleData, bubbleLayout);
 
+    //dial chart
+
+    var dialData = [
+        {domain: {x: [0,1], y:[0,1]},
+        value: 1,
+        title: "Belly Button Scrub Frequency",
+        mode: "gauge",
+        gauge: {
+            axis: { range: [0, 9]},
+            steps: [
+            {range: [0,1], color: "gray"},
+            {range: [2,3], color: "lightblue"},
+            {range: [4,5], color: "gray"},
+            {range: [6,7], color: "lightblue"},
+            {range: [8,9], color: "gray"}
+        ]}
+    }];
+    var dialLayout = {width: 600, height: 450, margin: {t:0, b:0}};
+    Plotly.newPlot("gauge", dialData, dialLayout);
+
+
+    //plotly new plot do this here
+
     console.log(data.metadata[0]);
     var metaData = data.metadata[0];
     console.log(metaData);
