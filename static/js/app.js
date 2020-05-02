@@ -5,6 +5,18 @@ d3.json("data/samples.json").then((data) => {
     console.log(ids)
     //bar chart
     
+    // citation: http://bl.ocks.org/jfreels/6734823 which was the skeleton I used to add the selection box. It infomred the syntax to add the options into the selection, append the values and text
+
+var select = d3.select('select')
+
+var options = select
+  .selectAll('option')
+	.data(ids).enter()
+	.append('option')
+		.text(function (d) { return d; });
+        
+
+
     var barTrace = {
         x: data.samples[0].sample_values,
         y: data.samples[0].otu_ids,
