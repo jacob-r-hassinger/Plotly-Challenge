@@ -29,8 +29,9 @@ function idFilter() {
         };
     };
     console.log(filteredMetadata);
-    var metatable = d3.select("panel-body").selectAll("p").data(filteredMetadata).enter().append("p").text(function (a) { return a; })
-    };
+    var metainsert = d3.select('#sample-metadata').html("").append('ul').append("li").text(filteredMetadata["id"]);
+};
+
 
 idFilter()
 
