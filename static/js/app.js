@@ -29,7 +29,21 @@ function idFilter() {
         };
     };
     console.log(filteredMetadata);
-    var metainsert = d3.select('#sample-metadata').html("").append('ul').append("li").text(filteredMetadata["id"]);
+    var metainsert = d3.select('#sample-metadata')
+    .html("")
+    .append('ul')
+    .append("li")
+    .text("id: " + filteredMetadata["id"])
+    .append("li")
+    .text("age: " + filteredMetadata["age"])
+    .append("li")
+    .text("ethnicity: " + filteredMetadata["ethnicity"])
+    .append("li")
+    .text("gender: " + filteredMetadata["gender"])
+    .append("li")
+    .text("location: " + filteredMetadata["location"])
+    .append("li")
+    .text("wfreq: " + filteredMetadata["wfreq"]);
 };
 
 
