@@ -80,7 +80,7 @@ function idFilter() {
     var bubbleData = [bubbleTrace];
   
     var bubbleLayout = {
-        title: "OTU ID",
+        xaxis: {title: "OTU ID"},
         showlegend: true,
         height: 600,
         width: 1200
