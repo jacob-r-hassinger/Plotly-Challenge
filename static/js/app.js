@@ -7,7 +7,7 @@ d3.json("data/samples.json").then((data) => {
     
     // citation: http://bl.ocks.org/jfreels/6734823 which was the skeleton I used to add the selection box. It infomred the syntax to add the options into the selection, append the values and text
 
-var select = d3.select('select')
+var select = d3.select('select').on("change", idFilter)
 
 var options = select
   .selectAll('option')
@@ -15,6 +15,24 @@ var options = select
 	.append('option')
 		.text(function (d) { return d; });
         
+//now its time to build a function that detects a change to the selection box, selects the value of the box, and filters the dataset based on the value
+
+function idFilter() {
+    var idSelection = d3.select('select').property('value');
+    console.log(typeof idSelection);
+    var metaData = dataFile.metadata;
+    console.log(typeof metaData[0]["id"]);
+    for (i=0; i < metaData.length; i++) {
+        if (metaData[i]["id"] === Number(idSelection)) {
+            console.log(metaData[i]["id"]);
+            var filteredMetadata = metaData[i];
+        };
+    };
+    console.log(filteredMetadata);
+    var metatable = d3.select("panel-body").selectAll("p").data(filteredMetadata).enter().append("p").text(function (a) { return a; })
+    };
+
+idFilter()
 
 
     var barTrace = {
