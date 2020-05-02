@@ -1,8 +1,8 @@
 d3.json("data/samples.json").then((data) => {
     var dataFile = data;
-    console.log(dataFile)
+    
     var ids = data.names;
-    console.log(ids)
+    
     //bar chart
     
     // citation: http://bl.ocks.org/jfreels/6734823 which was the skeleton I used to add the selection box. It infomred the syntax to add the options into the selection, append the values and text
@@ -19,16 +19,15 @@ var options = select
 
 function idFilter() {
     var idSelection = d3.select('select').property('value');
-    console.log(typeof idSelection);
     var metaData = dataFile.metadata;
-    console.log(typeof metaData[0]["id"]);
     for (i=0; i < metaData.length; i++) {
         if (metaData[i]["id"] === Number(idSelection)) {
-            console.log(metaData[i]["id"]);
+            
             var filteredMetadata = metaData[i];
+            var filterindex = i;
         };
     };
-    console.log(filteredMetadata);
+    
     var metainsert = d3.select('#sample-metadata')
     .html("")
     .append('ul')
@@ -44,15 +43,15 @@ function idFilter() {
     .text("location: " + filteredMetadata["location"])
     .append("li")
     .text("wfreq: " + filteredMetadata["wfreq"]);
-};
 
-
-idFilter()
-
-
+    otuIdlist = []
+    otunumberslist = data.samples[filterindex].otu_ids.slice(0,9)
+    for (i=0; i < otunumberslist.length; i++) {
+            otuIdlist.push("OTU " + otunumberslist[i]);
+    };
     var barTrace = {
-        x: data.samples[0].sample_values,
-        y: data.samples[0].otu_ids,
+        x: data.samples[filterindex].sample_values.slice(0,9),
+        y: otuIdlist,
         type: "bar",
         orientation: "h"
     };
@@ -61,18 +60,20 @@ idFilter()
 
     var barLayout = {
         height: 400,
-        width: 400
+        width: 400,
+        title: "10 of Subject's Belly Button Bacteria"
     };
 
     Plotly.newPlot("bar", barData, barLayout);
 
+
     //bubble chart
     var bubbleTrace = {
-        y: data.samples[0].sample_values,
-        x: data.samples[0].otu_ids,
+        y: data.samples[filterindex].sample_values,
+        x: data.samples[filterindex].otu_ids,
         mode: 'markers',
         marker: {
-            size: data.samples[0].sample_values
+            size: data.samples[filterindex].sample_values
         }
     };
   
@@ -87,31 +88,20 @@ idFilter()
   
     Plotly.newPlot("bubble", bubbleData, bubbleLayout);
 
+
+
     //dial chart
-    // find avg wash frequency for dataset
-    var washList = []
-    for (i = 0; i < dataFile["metadata"].length; i++) {
-        if (dataFile["metadata"][i]["wfreq"] != null) {
-            washList.push(dataFile["metadata"][i]["wfreq"]);
-        };   
-    };
-    console.log(washList);
-
-    var sumWashFreq =  0
+    // find wash frequency for individual
     
-    for (i=0; i < washList.length; i++) {
-        sumWashFreq += washList[i];
+    var washFreq = dataFile["metadata"][filterindex]["wfreq"];
+    if (washFreq === null) {
+        washFreq = 0
     };
-
-    var avgWashFreq = sumWashFreq/washList.length;
-
-    console.log(avgWashFreq);
-
     var dialdata = [
         {
             domain: { x: [0, 1], y: [0, 1] },
-            value: avgWashFreq,
-            title: "Average Belly Button Scrub Frequency",
+            value: washFreq,
+            title: "Weekly Belly Button Scrub Frequency",
             type: "indicator",
             mode: "gauge",
             gauge: {
@@ -130,24 +120,35 @@ idFilter()
     var dialLayout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
     Plotly.newPlot('gauge', dialdata, dialLayout);
 
+};
+
+idFilter()
+
+
+   
+
+    
+
+    
+
 
     //plotly new plot do this here
 
-    console.log(data.metadata[0]);
-    var metaData = data.metadata[0];
-    console.log(metaData);
-    console.log(metaData.id);
-    d3.select("panel-body")
-        .append("ul")
-        .data(metaData)
-        .html(function(i) {
-            return `<li>${i.id}</li><li>${i.ethnicity}</li><li>${i.gender}</li><li>${i.age}</li><li>${i.location}</li>`;
-        });
+    // console.log(data.metadata[0]);
+    // var metaData = data.metadata[0];
+    // console.log(metaData);
+    // console.log(metaData.id);
+    // d3.select("panel-body")
+    //     .append("ul")
+    //     .data(metaData)
+    //     .html(function(i) {
+    //         return `<li>${i.id}</li><li>${i.ethnicity}</li><li>${i.gender}</li><li>${i.age}</li><li>${i.location}</li>`;
+    //     });
 
-    var sampleList = data.samples;
-    console.log(sampleList)
-    var otuLabels = data.samples.otu_labels;
-    var otuIds = data.samples.otu_ids;
+    // var sampleList = data.samples;
+    // console.log(sampleList)
+    // var otuLabels = data.samples.otu_labels;
+    // var otuIds = data.samples.otu_ids;
 });
 
 
